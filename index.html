@@ -6,93 +6,148 @@
 <title>Production Calculator</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #f7f7f7;
+    font-family: 'Arial', sans-serif;
+    background: #f4f7fb;
     margin: 20px;
+    color: #333;
   }
+
   h1 {
     text-align: center;
-    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+    padding-top: 20px;
   }
+
   .tabs {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
   }
+
   .tabs button {
-    padding: 10px 20px;
-    margin: 0 5px;
+    padding: 12px 30px;
+    margin: 0 8px;
     border: none;
-    background: #555;
+    background: #007bff;
     color: white;
     cursor: pointer;
-    border-radius: 4px 4px 0 0;
+    border-radius: 8px;
     font-weight: bold;
+    transition: background-color 0.3s;
+    font-size: 1rem;
   }
+
   .tabs button.active {
-    background: #007bff;
+    background: #0056b3;
   }
+
+  .tabs button:hover {
+    background: #0056b3;
+  }
+
   .tab-content {
     display: none;
     background: white;
-    padding: 20px;
-    border-radius: 0 8px 8px 8px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
     margin: 0 auto 40px auto;
   }
+
   .tab-content.active {
     display: block;
   }
+
   label {
     display: block;
-    margin: 8px 0 4px;
+    margin: 12px 0 5px;
+    font-size: 1.1rem;
+    font-weight: 500;
   }
-  input[type="number"] {
-    padding: 6px;
-    width: 160px;
+
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 12px;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    margin-bottom: 20px;
   }
-  button.calc {
-    margin-top: 12px;
-    padding: 10px 18px;
+
+  input[type="number"]:focus,
+  select:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  button {
+    padding: 12px 25px;
     background: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 1rem;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    width: 100%;
+    transition: background-color 0.3s;
   }
-  button.calc:hover {
+
+  button:hover {
     background: #0056b3;
   }
-  .section {
-    margin-top: 20px;
-    background: #f0f0f0;
-    padding: 15px;
-    border-radius: 6px;
-    font-size: 1rem;
+
+  .result-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
   }
-  .section h3 {
-    margin-bottom: 10px;
+
+  .result-section h3 {
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
   }
-  .history {
-    margin-top: 20px;
-    background: #fff3cd;
-    padding: 12px;
-    border-radius: 6px;
-    max-height: 220px;
-    overflow-y: auto;
-    font-size: 0.9rem;
+
+  .result-section p {
+    margin: 10px 0;
   }
-  .entry {
-    border-bottom: 1px solid #e1dba5;
-    padding: 6px 0;
+
+  .switch-option {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .entry:last-child {
-    border-bottom: none;
+
+  .switch-option label {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .switch-option select {
+    width: 40%;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .switch-option div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-section span {
+    font-weight: bold;
+    color: #333;
   }
 </style>
 </head>
@@ -103,99 +158,95 @@
 <div class="tabs" role="tablist" aria-label="Calculator Tabs">
   <button class="active" role="tab" aria-selected="true" aria-controls="tab-6pack" id="tabBtn-6pack" tabindex="0">6 Pack Orders</button>
   <button role="tab" aria-selected="false" aria-controls="tab-single" id="tabBtn-single" tabindex="-1">Single Orders</button>
-  <button role="tab" aria-selected="false" aria-controls="tab-start" id="tabBtn-start" tabindex="-1">Start Order Calculation</button>
+  <button role="tab" aria-selected="false" aria-controls="tab-wo-quantity" id="tabBtn-wo-quantity" tabindex="-1">Works Order Quantity</button>
 </div>
 
 <!-- 6 Pack Orders Tab -->
 <section id="tab-6pack" class="tab-content active" role="tabpanel" aria-labelledby="tabBtn-6pack" tabindex="0">
   <h2>6 Pack Order Calculator</h2>
-  <label for="layers">Layers:</label>
+  <label for="layers">Number of Layers Completed:</label>
   <input type="number" id="layers" min="0" value="0" />
-  <label for="extraTrays">Extra Trays:</label>
+
+  <label for="extraTrays">Extra Trays (not forming a full layer):</label>
   <input type="number" id="extraTrays" min="0" value="0" />
+
   <label for="ind6">Individual 6 Packs (Loose):</label>
   <input type="number" id="ind6" min="0" value="0" />
 
-  <h4>Subtract Last Shift (Optional)</h4>
-  <label for="lastShiftTrays">Last Shift Trays:</label>
-  <input type="number" id="lastShiftTrays" min="0" value="0" />
-  <label for="lastShiftLoose">Last Shift Loose 6 Packs:</label>
-  <input type="number" id="lastShiftLoose" min="0" value="0" />
+  <button id="calcBtn">Calculate</button>
 
-  <button class="calc" id="calc6Btn">Calculate</button>
-
-  <div class="section" aria-live="polite" aria-atomic="true">
-    <h3>Works Order Sheet Total</h3>
-    <p id="wo6">—</p>
+  <div class="result-section">
+    <h3>Works Order Sheet</h3>
+    <p><strong>Total Trays:</strong> <span id="woTrays">—</span></p>
+    <p><strong>Total Loose 6 Packs:</strong> <span id="woLoose6packs">—</span></p>
   </div>
-  <div class="section">
+
+  <div class="result-section">
     <h3>Record Sheet</h3>
-    <p id="record6">—</p>
-  </div>
-  <div class="history" aria-live="polite" aria-atomic="true">
-    <h3>History</h3>
-    <div id="history6"></div>
+    <p><strong>Total Trays:</strong> <span id="recordTrays">—</span></p>
+    <p><strong>Total 6 Packs:</strong> <span id="record6packs">—</span></p>
+    <p><strong>Total Bottles:</strong> <span id="recordBottles">—</span></p>
   </div>
 </section>
 
 <!-- Single Orders Tab -->
 <section id="tab-single" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-single" tabindex="0">
-  <h2>Single Bottle Order Calculator</h2>
-  <label for="layersS">Layers:</label>
+  <h2>Single Order Calculator</h2>
+  <label for="layersS">Number of Layers Completed:</label>
   <input type="number" id="layersS" min="0" value="0" />
-  <label for="extraTraysS">Extra Trays:</label>
+
+  <label for="extraTraysS">Extra Trays (not forming a full layer):</label>
   <input type="number" id="extraTraysS" min="0" value="0" />
+
   <label for="indS">Individual Singles (Loose):</label>
   <input type="number" id="indS" min="0" value="0" />
 
-  <h4>Subtract Last Shift (Optional)</h4>
-  <label for="lastShiftTraysS">Last Shift Trays:</label>
-  <input type="number" id="lastShiftTraysS" min="0" value="0" />
-  <label for="lastShiftLooseS">Last Shift Loose Singles:</label>
-  <input type="number" id="lastShiftLooseS" min="0" value="0" />
+  <button id="calcSingleBtn">Calculate</button>
 
-  <button class="calc" id="calcSingleBtn">Calculate</button>
-
-  <div class="section" aria-live="polite" aria-atomic="true">
-    <h3>Works Order Sheet Total</h3>
-    <p id="woS">—</p>
+  <div class="result-section">
+    <h3>Works Order Sheet</h3>
+    <p><strong>Total Trays:</strong> <span id="woTraysS">—</span></p>
+    <p><strong>Total Loose Singles:</strong> <span id="woLooseSingles">—</span></p>
   </div>
-  <div class="section">
+
+  <div class="result-section">
     <h3>Record Sheet</h3>
-    <p id="recordS">—</p>
-  </div>
-  <div class="history" aria-live="polite" aria-atomic="true">
-    <h3>History</h3>
-    <div id="historyS"></div>
+    <p><strong>Total Trays:</strong> <span id="recordTraysS">—</span></p>
+    <p><strong>Total Singles:</strong> <span id="recordSingles">—</span></p>
+    <p><strong>Total Bottles:</strong> <span id="recordBottlesS">—</span></p>
   </div>
 </section>
 
-<!-- Start Order Calculation Tab -->
-<section id="tab-start" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-start" tabindex="0">
-  <h2>Start Order Calculation (6 Packs)</h2>
-  <label for="orderQty">Works Order Quantity (6 Packs):</label>
-  <input type="number" id="orderQty" min="0" value="0" />
-  <button class="calc" id="calcStartBtn">Calculate</button>
+<!-- Works Order Quantity Tab -->
+<section id="tab-wo-quantity" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-wo-quantity" tabindex="0">
+  <h2>Works Order Quantity Calculator</h2>
 
-  <div class="section" aria-live="polite" aria-atomic="true">
-    <h3>Expected Trays</h3>
-    <p id="expectedTrays">—</p>
-    <p id="qcBreakdown">—</p>
+  <div class="switch-option">
+    <label for="orderType">Select Order Type:</label>
+    <select id="orderType" aria-label="Select Order Type">
+      <option value="6pack">6 Pack Order</option>
+      <option value="single">Single Order</option>
+    </select>
   </div>
-  <div class="history" aria-live="polite" aria-atomic="true">
-    <h3>History</h3>
-    <div id="historyStart"></div>
+
+  <label for="orderQty">Enter Order Quantity:</label>
+  <input type="number" id="orderQty" min="0" value="0" />
+
+  <button id="calcWoQtyBtn">Calculate</button>
+
+  <div class="result-section">
+    <h3>Works Order Sheet</h3>
+    <p><strong>Total Trays:</strong> <span id="woTraysQty">—</span></p>
   </div>
 </section>
 
 <script>
-// --- TAB SWITCHING ---
+// Tab switching logic
 const tabButtons = document.querySelectorAll('.tabs button');
 const tabPanels = document.querySelectorAll('.tab-content');
 
 tabButtons.forEach((btn, i) => {
   btn.addEventListener('click', () => {
-    // Update active button
     tabButtons.forEach(b => {
       b.classList.remove('active');
       b.setAttribute('aria-selected', 'false');
@@ -205,145 +256,60 @@ tabButtons.forEach((btn, i) => {
     btn.setAttribute('aria-selected', 'true');
     btn.setAttribute('tabindex', '0');
 
-    // Show correct panel
     tabPanels.forEach(panel => panel.classList.remove('active'));
     tabPanels[i].classList.add('active');
     tabPanels[i].focus();
   });
 });
 
-// --- UTILS ---
-function saveHistory(key, historyArray) {
-  localStorage.setItem(key, JSON.stringify(historyArray));
-}
-function loadHistory(key) {
-  return JSON.parse(localStorage.getItem(key)) || [];
-}
-function renderHistory(containerId, historyArray) {
-  const container = document.getElementById(containerId);
-  if (!historyArray.length) {
-    container.innerHTML = "<p>No history yet.</p>";
-    return;
-  }
-  container.innerHTML = '';
-  historyArray.slice().reverse().forEach(entry => {
-    const div = document.createElement('div');
-    div.className = 'entry';
-    div.textContent = entry;
-    container.appendChild(div);
-  });
-}
-
-// --- 6 PACK ORDERS CALCULATION ---
-document.getElementById('calc6Btn').addEventListener('click', () => {
+// 6 Pack Order Calculation
+document.getElementById('calcBtn').addEventListener('click', function() {
   const layers = parseInt(document.getElementById('layers').value) || 0;
   const extraTrays = parseInt(document.getElementById('extraTrays').value) || 0;
   const individual6 = parseInt(document.getElementById('ind6').value) || 0;
-  const lastShiftTrays = parseInt(document.getElementById('lastShiftTrays').value) || 0;
-  const lastShiftLoose = parseInt(document.getElementById('lastShiftLoose').value) || 0;
+  const trays = (layers * 7) + extraTrays;
+  const total6Packs = trays * 42;
+  const totalBottles = total6Packs * 6;
 
-  let totalTrays = layers + extraTrays;
-  let totalLoose = individual6;
-
-  // Subtract last shift if values > 0
-  if (lastShiftTrays > 0 || lastShiftLoose > 0) {
-    totalTrays = Math.max(0, totalTrays - lastShiftTrays);
-    totalLoose = Math.max(0, totalLoose - lastShiftLoose);
-  }
-
-  // Works Order Sheet total
-  const woTotal = totalTrays * 24 + totalLoose * 6;
-
-  // Record Sheet total
-  const recordTotal = totalTrays * 24 + totalLoose * 6;
-
-  document.getElementById('wo6').textContent = woTotal.toLocaleString();
-  document.getElementById('record6').textContent = recordTotal.toLocaleString();
-
-  // Save to history
-  const now = new Date();
-  const entry = `${now.toLocaleString()} — Trays: ${totalTrays}, Loose: ${totalLoose}, WO Total: ${woTotal}`;
-  const historyKey = 'history6pack';
-  const historyArray = loadHistory(historyKey);
-  historyArray.push(entry);
-  saveHistory(historyKey, historyArray);
-  renderHistory('history6', historyArray);
+  document.getElementById('woTrays').textContent = trays.toLocaleString();
+  document.getElementById('woLoose6packs').textContent = individual6.toLocaleString();
+  document.getElementById('recordTrays').textContent = trays.toLocaleString();
+  document.getElementById('record6packs').textContent = total6Packs.toLocaleString();
+  document.getElementById('recordBottles').textContent = totalBottles.toLocaleString();
 });
 
-// Load 6 pack history on page load
-renderHistory('history6', loadHistory('history6pack'));
-
-// --- SINGLE ORDERS CALCULATION ---
-document.getElementById('calcSingleBtn').addEventListener('click', () => {
+// Single Order Calculation
+document.getElementById('calcSingleBtn').addEventListener('click', function() {
   const layersS = parseInt(document.getElementById('layersS').value) || 0;
   const extraTraysS = parseInt(document.getElementById('extraTraysS').value) || 0;
   const individualS = parseInt(document.getElementById('indS').value) || 0;
-  const lastShiftTraysS = parseInt(document.getElementById('lastShiftTraysS').value) || 0;
-  const lastShiftLooseS = parseInt(document.getElementById('lastShiftLooseS').value) || 0;
 
-  let totalTraysS = layersS + extraTraysS;
-  let totalLooseS = individualS;
+  const traysS = (layersS * 7) + extraTraysS;
+  const totalSingles = traysS * 140;
+  const totalBottlesS = totalSingles;
 
-  // Subtract last shift if values > 0
-  if (lastShiftTraysS > 0 || lastShiftLooseS > 0) {
-    totalTraysS = Math.max(0, totalTraysS - lastShiftTraysS);
-    totalLooseS = Math.max(0, totalLooseS - lastShiftLooseS);
-  }
-
-  // Works Order Sheet total for single bottles
-  // Each tray = 12 singles, loose singles count as is
-  const woTotalS = totalTraysS * 12 + totalLooseS;
-
-  // Record Sheet total same as WO total
-  const recordTotalS = woTotalS;
-
-  document.getElementById('woS').textContent = woTotalS.toLocaleString();
-  document.getElementById('recordS').textContent = recordTotalS.toLocaleString();
-
-  // Save to history
-  const now = new Date();
-  const entry = `${now.toLocaleString()} — Trays: ${totalTraysS}, Loose: ${totalLooseS}, WO Total: ${woTotalS}`;
-  const historyKey = 'historySingle';
-  const historyArray = loadHistory(historyKey);
-  historyArray.push(entry);
-  saveHistory(historyKey, historyArray);
-  renderHistory('historyS', historyArray);
+  document.getElementById('woTraysS').textContent = traysS.toLocaleString();
+  document.getElementById('woLooseSingles').textContent = individualS.toLocaleString();
+  document.getElementById('recordTraysS').textContent = traysS.toLocaleString();
+  document.getElementById('recordSingles').textContent = totalSingles.toLocaleString();
+  document.getElementById('recordBottlesS').textContent = totalBottlesS.toLocaleString();
 });
 
-// Load single orders history on page load
-renderHistory('historyS', loadHistory('historySingle'));
-
-// --- START ORDER CALCULATION ---
-document.getElementById('calcStartBtn').addEventListener('click', () => {
+// Works Order Quantity Calculation
+document.getElementById('calcWoQtyBtn').addEventListener('click', function() {
   const orderQty = parseInt(document.getElementById('orderQty').value) || 0;
+  const orderType = document.getElementById('orderType').value;
 
-  // Calculate trays required (each tray has 24 bottles)
-  const traysRequired = Math.ceil(orderQty / 24);
+  let traysRequired = 0;
 
-  // QC Breakdown based on trays
-  // For example, you want to QC the first 5 trays fully, then 10% of remainder trays, rounded up
-  let qcCount = 0;
-  if (traysRequired <= 5) {
-    qcCount = traysRequired;
-  } else {
-    qcCount = 5 + Math.ceil((traysRequired - 5) * 0.1);
+  if (orderType === '6pack') {
+    traysRequired = Math.ceil(orderQty / 42);
+  } else if (orderType === 'single') {
+    traysRequired = Math.ceil(orderQty / 140);
   }
 
-  document.getElementById('expectedTrays').textContent = `${traysRequired.toLocaleString()} tray(s)`;
-  document.getElementById('qcBreakdown').textContent = `QC Count: ${qcCount.toLocaleString()} tray(s)`;
-
-  // Save to history
-  const now = new Date();
-  const entry = `${now.toLocaleString()} — Order Qty: ${orderQty}, Trays Required: ${traysRequired}, QC: ${qcCount}`;
-  const historyKey = 'historyStartOrder';
-  const historyArray = loadHistory(historyKey);
-  historyArray.push(entry);
-  saveHistory(historyKey, historyArray);
-  renderHistory('historyStart', historyArray);
+  document.getElementById('woTraysQty').textContent = traysRequired.toLocaleString();
 });
-
-// Load start order history on page load
-renderHistory('historyStart', loadHistory('historyStartOrder'));
 </script>
 
 </body>
