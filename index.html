@@ -1,316 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Production Calculator</title>
-<style>
-  body {
-    font-family: 'Arial', sans-serif;
-    background: #f4f7fb;
-    margin: 20px;
-    color: #333;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Production Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 20px;
+    }
 
-  h1 {
-    text-align: center;
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 30px;
-    padding-top: 20px;
-  }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
 
-  .tabs button {
-    padding: 12px 30px;
-    margin: 0 8px;
-    border: none;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    font-size: 1rem;
-  }
+    .tabs button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      background: #555;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px 4px 0 0;
+      font-weight: bold;
+    }
 
-  .tabs button.active {
-    background: #0056b3;
-  }
+    .tabs button.active {
+      background: #007bff;
+    }
 
-  .tabs button:hover {
-    background: #0056b3;
-  }
+    .tab-content {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 0 8px 8px 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      margin: 0 auto 40px auto;
+    }
 
-  .tab-content {
-    display: none;
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto 40px auto;
-  }
+    .tab-content.active {
+      display: block;
+    }
 
-  .tab-content.active {
-    display: block;
-  }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
 
-  label {
-    display: block;
-    margin: 12px 0 5px;
-    font-size: 1.1rem;
-    font-weight: 500;
-  }
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-  }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
 
-  input[type="number"]:focus,
-  select:focus {
-    border-color: #007bff;
-    outline: none;
-  }
+    button:hover {
+      background: #0056b3;
+    }
 
-  button {
-    padding: 12px 25px;
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    width: 100%;
-    transition: background-color 0.3s;
-  }
+    .result-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
 
-  button:hover {
-    background: #0056b3;
-  }
+    .result-section h3 {
+      margin-bottom: 15px;
+    }
 
-  .result-section {
-    margin-top: 30px;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: 1.1rem;
-  }
-
-  .result-section h3 {
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-    font-weight: 600;
-  }
-
-  .result-section p {
-    margin: 10px 0;
-  }
-
-  .switch-option {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .switch-option label {
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  .switch-option select {
-    width: 40%;
-    padding: 10px;
-    border-radius: 8px;
-  }
-
-  .switch-option div {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .result-section span {
-    font-weight: bold;
-    color: #333;
-  }
-</style>
+    .result-section p {
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Production Calculator</h1>
+  <h1>Production Calculator</h1>
 
-<div class="tabs" role="tablist" aria-label="Calculator Tabs">
-  <button class="active" role="tab" aria-selected="true" aria-controls="tab-6pack" id="tabBtn-6pack" tabindex="0">6 Pack Orders</button>
-  <button role="tab" aria-selected="false" aria-controls="tab-single" id="tabBtn-single" tabindex="-1">Single Orders</button>
-  <button role="tab" aria-selected="false" aria-controls="tab-wo-quantity" id="tabBtn-wo-quantity" tabindex="-1">Works Order Quantity</button>
-</div>
-
-<!-- 6 Pack Orders Tab -->
-<section id="tab-6pack" class="tab-content active" role="tabpanel" aria-labelledby="tabBtn-6pack" tabindex="0">
-  <h2>6 Pack Order Calculator</h2>
-  <label for="layers">Number of Layers Completed:</label>
-  <input type="number" id="layers" min="0" value="0" />
-
-  <label for="extraTrays">Extra Trays (not forming a full layer):</label>
-  <input type="number" id="extraTrays" min="0" value="0" />
-
-  <label for="ind6">Individual 6 Packs (Loose):</label>
-  <input type="number" id="ind6" min="0" value="0" />
-
-  <button id="calcBtn">Calculate</button>
-
-  <div class="result-section">
-    <h3>Works Order Sheet</h3>
-    <p><strong>Total Trays:</strong> <span id="woTrays">—</span></p>
-    <p><strong>Total Loose 6 Packs:</strong> <span id="woLoose6packs">—</span></p>
+  <div class="tabs" role="tablist" aria-label="Calculator Tabs">
+    <button class="active" role="tab" aria-selected="true" aria-controls="tab-6pack" id="tabBtn-6pack" tabindex="0">6 Pack Orders</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-single" id="tabBtn-single" tabindex="-1">Single Orders</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-woqty" id="tabBtn-woqty" tabindex="-1">Works Order Quantity</button>
   </div>
 
-  <div class="result-section">
-    <h3>Record Sheet</h3>
-    <p><strong>Total Trays:</strong> <span id="recordTrays">—</span></p>
-    <p><strong>Total 6 Packs:</strong> <span id="record6packs">—</span></p>
-    <p><strong>Total Bottles:</strong> <span id="recordBottles">—</span></p>
-  </div>
-</section>
+  <!-- 6 Pack Orders Tab -->
+  <section id="tab-6pack" class="tab-content active" role="tabpanel" aria-labelledby="tabBtn-6pack" tabindex="0">
+    <h2>6 Pack Order Calculator</h2>
+    <label for="layers">Number of Layers Completed:</label>
+    <input type="number" id="layers" min="0" value="0" />
 
-<!-- Single Orders Tab -->
-<section id="tab-single" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-single" tabindex="0">
-  <h2>Single Order Calculator</h2>
-  <label for="layersS">Number of Layers Completed:</label>
-  <input type="number" id="layersS" min="0" value="0" />
+    <label for="extraTrays">Extra Trays (not forming a full layer):</label>
+    <input type="number" id="extraTrays" min="0" value="0" />
 
-  <label for="extraTraysS">Extra Trays (not forming a full layer):</label>
-  <input type="number" id="extraTraysS" min="0" value="0" />
+    <label for="ind6">Individual 6 Packs (Loose):</label>
+    <input type="number" id="ind6" min="0" value="0" />
 
-  <label for="indS">Individual Singles (Loose):</label>
-  <input type="number" id="indS" min="0" value="0" />
+    <button id="calcBtn">Calculate</button>
 
-  <button id="calcSingleBtn">Calculate</button>
+    <div class="result-section">
+      <h3>Works Order Sheet</h3>
+      <p><strong>Total Trays:</strong> <span id="woTrays">—</span></p>
+      <p><strong>Total Loose 6 Packs:</strong> <span id="woLoose6packs">—</span></p>
+    </div>
 
-  <div class="result-section">
-    <h3>Works Order Sheet</h3>
-    <p><strong>Total Trays:</strong> <span id="woTraysS">—</span></p>
-    <p><strong>Total Loose Singles:</strong> <span id="woLooseSingles">—</span></p>
-  </div>
+    <div class="result-section">
+      <h3>Record Sheet</h3>
+      <p><strong>Total Trays:</strong> <span id="recordTrays">—</span></p>
+      <p><strong>Total 6 Packs:</strong> <span id="record6packs">—</span></p>
+      <p><strong>Total Bottles:</strong> <span id="recordBottles">—</span></p>
+    </div>
+  </section>
 
-  <div class="result-section">
-    <h3>Record Sheet</h3>
-    <p><strong>Total Trays:</strong> <span id="recordTraysS">—</span></p>
-    <p><strong>Total Singles:</strong> <span id="recordSingles">—</span></p>
-    <p><strong>Total Bottles:</strong> <span id="recordBottlesS">—</span></p>
-  </div>
-</section>
+  <!-- Single Orders Tab -->
+  <section id="tab-single" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-single" tabindex="0">
+    <h2>Single Order Calculator</h2>
+    <label for="layersS">Number of Layers Completed:</label>
+    <input type="number" id="layersS" min="0" value="0" />
 
-<!-- Works Order Quantity Tab -->
-<section id="tab-wo-quantity" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-wo-quantity" tabindex="0">
-  <h2>Works Order Quantity Calculator</h2>
+    <label for="extraTraysS">Extra Trays (not forming a full layer):</label>
+    <input type="number" id="extraTraysS" min="0" value="0" />
 
-  <div class="switch-option">
+    <label for="indS">Individual Singles (Loose):</label>
+    <input type="number" id="indS" min="0" value="0" />
+
+    <button id="calcSingleBtn">Calculate</button>
+
+    <div class="result-section">
+      <h3>Works Order Sheet</h3>
+      <p><strong>Total Trays:</strong> <span id="woTraysS">—</span></p>
+      <p><strong>Total Loose Singles:</strong> <span id="woLooseSingles">—</span></p>
+    </div>
+
+    <div class="result-section">
+      <h3>Record Sheet</h3>
+      <p><strong>Total Trays:</strong> <span id="recordTraysS">—</span></p>
+      <p><strong>Total Singles:</strong> <span id="recordSingles">—</span></p>
+      <p><strong>Total Bottles:</strong> <span id="recordBottlesS">—</span></p>
+    </div>
+  </section>
+
+  <!-- Works Order Quantity Tab -->
+  <section id="tab-woqty" class="tab-content" role="tabpanel" aria-labelledby="tabBtn-woqty" tabindex="0">
+    <h2>Works Order Quantity</h2>
+    <label for="orderQty">Enter Order Quantity:</label>
+    <input type="number" id="orderQty" min="0" value="0" />
+
     <label for="orderType">Select Order Type:</label>
-    <select id="orderType" aria-label="Select Order Type">
-      <option value="6pack">6 Pack Order</option>
-      <option value="single">Single Order</option>
+    <select id="orderType">
+      <option value="6pack">6 Pack</option>
+      <option value="single">Single</option>
     </select>
-  </div>
 
-  <label for="orderQty">Enter Order Quantity:</label>
-  <input type="number" id="orderQty" min="0" value="0" />
+    <button id="calcWoQtyBtn">Calculate Trays Required</button>
 
-  <button id="calcWoQtyBtn">Calculate</button>
+    <div class="result-section">
+      <h3>Trays Required</h3>
+      <p><strong>Total Trays:</strong> <span id="woTraysQty">—</span></p>
+    </div>
+  </section>
 
-  <div class="result-section">
-    <h3>Works Order Sheet</h3>
-    <p><strong>Total Trays:</strong> <span id="woTraysQty">—</span></p>
-  </div>
-</section>
+  <script>
+    // --- TAB SWITCHING ---
+    const tabButtons = document.querySelectorAll('.tabs button');
+    const tabPanels = document.querySelectorAll('.tab-content');
 
-<script>
-// Tab switching logic
-const tabButtons = document.querySelectorAll('.tabs button');
-const tabPanels = document.querySelectorAll('.tab-content');
+    tabButtons.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+          b.setAttribute('tabindex', '-1');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('tabindex', '0');
 
-tabButtons.forEach((btn, i) => {
-  btn.addEventListener('click', () => {
-    tabButtons.forEach(b => {
-      b.classList.remove('active');
-      b.setAttribute('aria-selected', 'false');
-      b.setAttribute('tabindex', '-1');
+        tabPanels.forEach(panel => panel.classList.remove('active'));
+        tabPanels[i].classList.add('active');
+        tabPanels[i].focus();
+      });
     });
-    btn.classList.add('active');
-    btn.setAttribute('aria-selected', 'true');
-    btn.setAttribute('tabindex', '0');
 
-    tabPanels.forEach(panel => panel.classList.remove('active'));
-    tabPanels[i].classList.add('active');
-    tabPanels[i].focus();
-  });
-});
+    // --- 6 PACK ORDER CALCULATION ---
+    document.getElementById('calcBtn').addEventListener('click', function() {
+      const layers = parseInt(document.getElementById('layers').value) || 0;
+      const extraTrays = parseInt(document.getElementById('extraTrays').value) || 0;
+      const individual6 = parseInt(document.getElementById('ind6').value) || 0;
 
-// 6 Pack Order Calculation
-document.getElementById('calcBtn').addEventListener('click', function() {
-  const layers = parseInt(document.getElementById('layers').value) || 0;
-  const extraTrays = parseInt(document.getElementById('extraTrays').value) || 0;
-  const individual6 = parseInt(document.getElementById('ind6').value) || 0;
-  const trays = (layers * 7) + extraTrays;
-  const total6Packs = trays * 42;
-  const totalBottles = total6Packs * 6;
+      const trays = (layers * 7) + extraTrays;
+      const total6Packs = trays * 42;
+      const totalBottles = total6Packs * 6;
 
-  document.getElementById('woTrays').textContent = trays.toLocaleString();
-  document.getElementById('woLoose6packs').textContent = individual6.toLocaleString();
-  document.getElementById('recordTrays').textContent = trays.toLocaleString();
-  document.getElementById('record6packs').textContent = total6Packs.toLocaleString();
-  document.getElementById('recordBottles').textContent = totalBottles.toLocaleString();
-});
-
-// Single Order Calculation
-document.getElementById('calcSingleBtn').addEventListener('click', function() {
-  const layersS = parseInt(document.getElementById('layersS').value) || 0;
-  const extraTraysS = parseInt(document.getElementById('extraTraysS').value) || 0;
-  const individualS = parseInt(document.getElementById('indS').value) || 0;
-
-  const traysS = (layersS * 7) + extraTraysS;
-  const totalSingles = traysS * 140;
-  const totalBottlesS = totalSingles;
-
-  document.getElementById('woTraysS').textContent = traysS.toLocaleString();
-  document.getElementById('woLooseSingles').textContent = individualS.toLocaleString();
-  document.getElementById('recordTraysS').textContent = traysS.toLocaleString();
-  document.getElementById('recordSingles').textContent = totalSingles.toLocaleString();
-  document.getElementById('recordBottlesS').textContent = totalBottlesS.toLocaleString();
-});
-
-// Works Order Quantity Calculation
-document.getElementById('calcWoQtyBtn').addEventListener('click', function() {
-  const orderQty = parseInt(document.getElementById('orderQty').value) || 0;
-  const orderType = document.getElementById('orderType').value;
-
-  let traysRequired = 0;
-
-  if (orderType === '6pack') {
-    traysRequired = Math.ceil(orderQty / 42);
-  } else if (orderType === 'single') {
-    traysRequired = Math.ceil(orderQty / 140);
-  }
-
-  document.getElementById('woTraysQty').textContent = traysRequired.toLocaleString();
-});
-</script>
-
-</body>
-</html>
+      document.getElementById('woTrays').textContent = trays.toLocaleString();
+      document.getElementById('woLoose6packs').textContent = individual6.toLocaleString();
+      document.getElementById('recordTrays').
